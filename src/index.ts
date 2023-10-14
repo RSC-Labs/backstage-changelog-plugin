@@ -1,1 +1,0 @@
-export { EntityChangelogCard } from './plugin';

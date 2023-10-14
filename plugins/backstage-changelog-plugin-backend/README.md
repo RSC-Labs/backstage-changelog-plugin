@@ -1,7 +1,5 @@
 # @rsc-labs/changelog-plugin
 
-<img src='./docs/plugin_icon.png' width='100' height='150' alt='Changelog card screenshot'>
-
 Backstage Changelog Plugin is configurable and customizable plugin for viewing a changelog.
 You can write your own parser or use default one, which follows [Keep the changelog](https://keepachangelog.com/) notation.
 
@@ -20,75 +18,7 @@ npx @backstage/create-app
 ```
 
 Then, you will need to install and configure the changelog plugins for the frontend and the backend.
-
-## Frontend plugin
-
-Install:
-```bash
-cd packages/app
-yarn add @rsc-labs/backstage-changelog-plugin
-```
-
-You have two options how you can use Changelog functionality.
-
-### Card in Overview page:
-
-Add the card to `packages/app/src/components/catalog/EntityPage.tsx`:
-```jsx
-// import:
-import { EntityChangelogCard } from '@rsc-labs/backstage-changelog-plugin';
-
-// use it in entity view
-const overviewContent = (
-  <Grid container
-  ...
-    <Grid item md={6} xs={12}>
-      <EntityChangelogCard />
-    </Grid>
-  </Grid>
-)
-```
-
-<img src='./docs/changelog_entity_card.png' alt='Changelog card screenshot'>
-
-### Table in separated tab
-
-Add content to `packages/app/src/components/catalog/EntityPage.tsx`:
-```jsx
-// import:
-import { EntityChangelogContent } from '@rsc-labs/backstage-changelog-plugin';
-
-const serviceEntityPage = (
-  <EntityLayout
-  ...
-    <EntityLayout.Route path="/changelog" title="Changelog">
-      <EntityChangelogContent/>
-    </EntityLayout.Route>
-  </Grid>
-)
-```
-
-<img src='./docs/changelog_entity_content.png' alt='Changelog content screenshot'>
-
-### Check if annotations are ok
-
-You can also check before if annotations are configured properly and depends on the result add EntityChangelogContent or EntityChangelogCard.
-Two methods are exported:
-```jsx
-export const isChangelogAnnotationConfigurationOk = (entity: Entity) : boolean
-```
-It checks if configuration of annotations is ok.
-```jsx
-export const getInfoAboutChangelogAnnotationConfiguration = (entity: Entity)
-```
-It return information what is wrong with configuration of annotations.
-
-### Frontend configuration
-
-We have created parser, which shall be able to parse English version of [Keep the changelog](https://keepachangelog.com/).
-If you have different notation in your organization, you can define your own parser and pass it to the plugin.
-
-For details see: [How to create own parser?](/plugins/backstage-changelog-plugin/README.md#how-to-create-my-own-parser)
+Frontend plugin installation can be found here: [Frontend plugin](https://github.com/RSC-Labs/backstage-changelog-plugin/tree/main/plugins/backstage-changelog-plugin)
 
 ## Backend plugin
 
@@ -158,8 +88,6 @@ Both "file" and "url" options are supported.
 ## TODO
 
 [ ] Unit tests
-
-[ ] Move logic from frontend to backend
 
 ## Contribution
 
