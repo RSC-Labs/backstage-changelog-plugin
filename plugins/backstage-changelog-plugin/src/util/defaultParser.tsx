@@ -40,8 +40,9 @@ export function defaultParser(content: string) : ChangelogProps[] {
     let actionCounter: number = 0;
 
 
-    const changelogParsed = splittedLines.reduce((resultArray: ChangelogProps[], item: string) => {
-      if (item.startsWith('## ')) {
+    const changelogParsed = splittedLines.reduce((resultArray: ChangelogProps[], item: string, currentIndex: number) => {
+      const isItLastLine = currentIndex == splittedLines.length - 1;
+      if (item.startsWith('## ') || isItLastLine) {
         if (action && actionContent && versionContent) {
           resultArray[changelogIndex].actions.push(
             {
@@ -55,15 +56,18 @@ export function defaultParser(content: string) : ChangelogProps[] {
         }
 
         action = undefined;
+        actionCounter = 0;
         actionContent = undefined;
         versionContent = undefined;
 
         changelogIndex++;
 
-        resultArray[changelogIndex] = {
-          versionNumber: item,
-          actions: [],
-          versionContent: undefined
+        if (!isItLastLine) {
+          resultArray[changelogIndex] = {
+            versionNumber: item,
+            actions: [],
+            versionContent: undefined
+          }
         }
       };
       if (item.startsWith('### ')) {

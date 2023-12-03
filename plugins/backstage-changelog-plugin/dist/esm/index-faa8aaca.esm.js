@@ -68,7 +68,7 @@ const EntityChangelogCard = backstagePluginChangelogPlugin.provide(
   createComponentExtension({
     name: "EntityChangelogCard",
     component: {
-      lazy: () => import('./index-97684674.esm.js').then((m) => m.ChangelogCard)
+      lazy: () => import('./index-2a031e0d.esm.js').then((m) => m.ChangelogCard)
     }
   })
 );
@@ -76,7 +76,7 @@ const EntityChangelogContent = backstagePluginChangelogPlugin.provide(
   createComponentExtension({
     name: "EntityChangelogContent",
     component: {
-      lazy: () => import('./index-97684674.esm.js').then((m) => m.ChangelogContent)
+      lazy: () => import('./index-2a031e0d.esm.js').then((m) => m.ChangelogContent)
     }
   })
 );
@@ -108,4 +108,4 @@ const getInfoAboutChangelogAnnotationConfiguration = (entity) => {
 };
 
 export { CHANGELOG_ANNOTATION_NAME as C, EntityChangelogContent as E, CHANGELOG_ANNOTATION_REF as a, EntityChangelogCard as b, changelogApiRef as c, getInfoAboutChangelogAnnotationConfiguration as g, isChangelogAnnotationConfigurationOk as i };
-//# sourceMappingURL=index-95103d7a.esm.js.map
+//# sourceMappingURL=index-faa8aaca.esm.js.map

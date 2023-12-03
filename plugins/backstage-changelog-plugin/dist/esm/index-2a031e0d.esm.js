@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import useAsync from 'react-use/lib/useAsync';
 import { Button, Dialog, DialogContent, Grid, Typography, Box, LinearProgress } from '@material-ui/core';
 import { useEntity } from '@backstage/plugin-catalog-react';
-import { C as CHANGELOG_ANNOTATION_NAME, a as CHANGELOG_ANNOTATION_REF, i as isChangelogAnnotationConfigurationOk, c as changelogApiRef } from './index-95103d7a.esm.js';
+import { C as CHANGELOG_ANNOTATION_NAME, a as CHANGELOG_ANNOTATION_REF, i as isChangelogAnnotationConfigurationOk, c as changelogApiRef } from './index-faa8aaca.esm.js';
 import { StatusOK, StatusRunning, StatusPending, StatusError, StatusWarning, Table, MarkdownContent, EmptyState, CodeSnippet, LinkButton } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
 import { Alert } from '@material-ui/lab';
@@ -18,8 +18,9 @@ function defaultParser(content) {
   let actionContent;
   let versionContent;
   let actionCounter = 0;
-  const changelogParsed = splittedLines.reduce((resultArray, item) => {
-    if (item.startsWith("## ")) {
+  const changelogParsed = splittedLines.reduce((resultArray, item, currentIndex) => {
+    const isItLastLine = currentIndex == splittedLines.length - 1;
+    if (item.startsWith("## ") || isItLastLine) {
       if (action && actionContent && versionContent) {
         resultArray[changelogIndex].actions.push(
           {
@@ -32,14 +33,17 @@ function defaultParser(content) {
         resultArray[changelogIndex].versionContent = versionContent;
       }
       action = void 0;
+      actionCounter = 0;
       actionContent = void 0;
       versionContent = void 0;
       changelogIndex++;
-      resultArray[changelogIndex] = {
-        versionNumber: item,
-        actions: [],
-        versionContent: void 0
-      };
+      if (!isItLastLine) {
+        resultArray[changelogIndex] = {
+          versionNumber: item,
+          actions: [],
+          versionContent: void 0
+        };
+      }
     }
     if (item.startsWith("### ")) {
       if (action && actionContent) {
@@ -324,4 +328,4 @@ const ChangelogContent = (props) => {
 };
 
 export { ChangelogCard, ChangelogContent };
-//# sourceMappingURL=index-97684674.esm.js.map
+//# sourceMappingURL=index-2a031e0d.esm.js.map
