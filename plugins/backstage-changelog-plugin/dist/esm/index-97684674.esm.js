@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import useAsync from 'react-use/lib/useAsync';
 import { Button, Dialog, DialogContent, Grid, Typography, Box, LinearProgress } from '@material-ui/core';
 import { useEntity } from '@backstage/plugin-catalog-react';
-import { C as CHANGELOG_ANNOTATION_NAME, a as CHANGELOG_ANNOTATION_REF, c as changelogApiRef, i as isChangelogAnnotationConfigurationOk } from './index-37b62e94.esm.js';
+import { C as CHANGELOG_ANNOTATION_NAME, a as CHANGELOG_ANNOTATION_REF, i as isChangelogAnnotationConfigurationOk, c as changelogApiRef } from './index-95103d7a.esm.js';
 import { StatusOK, StatusRunning, StatusPending, StatusError, StatusWarning, Table, MarkdownContent, EmptyState, CodeSnippet, LinkButton } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
 import { Alert } from '@material-ui/lab';
@@ -11,7 +11,7 @@ import 'react-router-dom';
 import '@backstage/errors';
 
 function defaultParser(content) {
-  let splittedLines = content.split(/\r?\n/);
+  const splittedLines = content.split(/\r?\n/);
   let changelogIndex = -1;
   let action;
   let ActionIcon;
@@ -83,15 +83,19 @@ function defaultParser(content) {
     if (item.startsWith("-")) {
       actionCounter++;
       if (actionContent) {
-        actionContent += item + "\n";
+        actionContent += `${item}
+`;
       } else {
-        actionContent = item + "\n";
+        actionContent = `${item}
+`;
       }
     }
     if (versionContent) {
-      versionContent += item + "\n";
+      versionContent += `${item}
+`;
     } else {
-      versionContent = item + "\n";
+      versionContent = `${item}
+`;
     }
     return resultArray;
   }, []);
@@ -217,12 +221,9 @@ const ChangelogAnnotationsEmptyState = () => {
   );
 };
 
-const ChangelogCard = (props) => {
+const ChangelogCardWithTable = (props) => {
   const changelogApi = useApi(changelogApiRef);
   const { entity } = useEntity();
-  if (!isChangelogAnnotationConfigurationOk(entity)) {
-    return ChangelogAnnotationsEmptyState();
-  }
   const { value, loading, error } = useAsync(async () => {
     return changelogApi.readChangelog(entity);
   });
@@ -237,6 +238,13 @@ const ChangelogCard = (props) => {
     return /* @__PURE__ */ React.createElement(ChangelogSmallTable, { changelogInfos });
   }
   return /* @__PURE__ */ React.createElement(React.Fragment, null);
+};
+const ChangelogCard = (props) => {
+  const { entity } = useEntity();
+  if (!isChangelogAnnotationConfigurationOk(entity)) {
+    return /* @__PURE__ */ React.createElement(ChangelogAnnotationsEmptyState, null);
+  }
+  return /* @__PURE__ */ React.createElement(ChangelogCardWithTable, { parser: props.parser });
 };
 
 const generateActionColumns = (changelogInfos) => {
@@ -289,12 +297,9 @@ const ChangelogFullTable = ({ changelogInfos }) => {
   );
 };
 
-const ChangelogContent = (props) => {
+const ChangelogContentWithTable = (props) => {
   const changelogApi = useApi(changelogApiRef);
   const { entity } = useEntity();
-  if (!isChangelogAnnotationConfigurationOk(entity)) {
-    return ChangelogAnnotationsEmptyState();
-  }
   const { value, loading, error } = useAsync(async () => {
     return changelogApi.readChangelog(entity);
   });
@@ -310,6 +315,13 @@ const ChangelogContent = (props) => {
   }
   return /* @__PURE__ */ React.createElement(React.Fragment, null);
 };
+const ChangelogContent = (props) => {
+  const { entity } = useEntity();
+  if (!isChangelogAnnotationConfigurationOk(entity)) {
+    return /* @__PURE__ */ React.createElement(ChangelogAnnotationsEmptyState, null);
+  }
+  return /* @__PURE__ */ React.createElement(ChangelogContentWithTable, { parser: props.parser });
+};
 
 export { ChangelogCard, ChangelogContent };
-//# sourceMappingURL=index-c99c80e0.esm.js.map
+//# sourceMappingURL=index-97684674.esm.js.map

@@ -29,7 +29,9 @@ enum EChangelogAction {
 
 // Default parser follows https://keepachangelog.com/
 export function defaultParser(content: string) : ChangelogProps[] {
+  // console.log(content); nie ma
     const splittedLines = content.split(/\r?\n/);
+    // console.log(splittedLines); //mają cudzysłów
 
     let changelogIndex = -1;
 
@@ -109,15 +111,15 @@ export function defaultParser(content: string) : ChangelogProps[] {
       if (item.startsWith('-')) {
         actionCounter++;
         if (actionContent) {
-          actionContent += `${item}'\n'`;
+          actionContent += `${item}\n`;
         } else {
-          actionContent = `${item}'\n'`;
+          actionContent = `${item}\n`;
         }
       }
       if (versionContent) {
-        versionContent += `${item}'\n'`;
+        versionContent += `${item}\n`;
       } else {
-        versionContent = `${item}'\n'`;
+        versionContent = `${item}\n`;
       }
 
       return resultArray;
