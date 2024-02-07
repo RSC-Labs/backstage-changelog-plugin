@@ -76,6 +76,16 @@ If you have different notation in your organization, you can define your own par
 
 #### How to create my own parser?
 
+Info: If you have your own parser already created, it shall be inserted in following way:
+
+```jsx
+import { myParser } from './yourParser';
+...
+<Grid item md={6} xs={12}>
+    <EntityChangelogCard parser={myParser} />
+</Grid>
+```
+
 Parser is represented by following type:
 
 ```jsx
@@ -89,6 +99,7 @@ export interface EntityChangelogProps {
 }
   
 ```
+
 It shall take `string` as argument and shall produce array of `ChangelogProps` output which follows:
 
 ```jsx
