@@ -17,3 +17,4 @@
 export * from './constants';
 export * from './defaultParser';
 export * from './types';
+export * from './semverParser';

@@ -3,7 +3,7 @@
 <img src='./docs/plugin_icon.png' width='100' height='150' alt='Changelog card screenshot'>
 
 Backstage Changelog Plugin is configurable and customizable plugin for viewing a changelog.
-You can write your own parser or use default one, which follows [Keep the changelog](https://keepachangelog.com/) notation.
+You can write your own parser, use [SemVer](https://semver.org/) parser or use default one, which follows [Keep the changelog](https://keepachangelog.com/) notation.
 
 ### What is Changelog, why and who needs it?
 Description from [Keep the changelog](https://keepachangelog.com/).
@@ -85,10 +85,25 @@ It return information what is wrong with configuration of annotations.
 
 ### Frontend configuration
 
-We have created parser, which shall be able to parse English version of [Keep the changelog](https://keepachangelog.com/).
+We have created parser, which shall be able to parse English version of [Keep the changelog](https://keepachangelog.com/). We have a [SemVer](https://semver.org/) parser also available.
 If you have different notation in your organization, you can define your own parser and pass it to the plugin.
 
 For details see: [How to create own parser?](/plugins/backstage-changelog-plugin/README.md#how-to-create-my-own-parser)
+
+
+### Changing parser to a SemVer
+ 
+ 
+```jsx
+import { semverParser } from '@rsc-labs/backstage-changelog-plugin';
+...
+<Grid item md={6} xs={12}>
+    <EntityChangelogCard parser={semverParser} />
+</Grid>
+```
+
+<img src='./docs/changelog_semver_entity_card.png' alt='Changelog semver content screenshot'>
+
 
 ## Backend plugin
 
