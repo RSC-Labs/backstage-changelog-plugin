@@ -14,9 +14,7 @@ export function semverParser (content: string) : ChangelogProps[] {
       contents.push(eachContent)
     }
   } while (eachContent);
-
   contents?.forEach(dataContent => {
-
     const versionNumber = `${dataContent[1]} (${dataContent[2]})`;
     const versionContent = dataContent[3] ? dataContent[3].trim() : undefined;
     const actions: {
@@ -25,38 +23,26 @@ export function semverParser (content: string) : ChangelogProps[] {
       content: string;
       icon?: any;
     }[] = [];
-
-    
-      if (versionContent) {
-        const contentLines = versionContent.split(/\r?\n/);
-
-        contentLines.forEach((line, index) => {
-          if(line.startsWith('### ')){
-            const action = line.replace('### ', '')
-            let actionContent = ''
-            let counter = 0
-            let i = index + 1
-            while(i < contentLines.length && !contentLines[i].startsWith('### ')){
-              if(contentLines[i].startsWith('*')){
-                counter++
-                actionContent += `${contentLines[i]}\n`
-              }
-              i++
+    if (versionContent) {
+      const contentLines = versionContent.split(/\r?\n/);
+      contentLines.forEach((line, index) => {
+        if(line.startsWith('### ')){
+          const action = line.replace('### ', '')
+          let actionContent = ''
+          let counter = 0
+          let i = index + 1
+          while(i < contentLines.length && !contentLines[i].startsWith('### ')){
+            if(contentLines[i].startsWith('*')){
+              counter++
+              actionContent += `${contentLines[i]}\n`
             }
-            actions.push({ name: action, counter, content: actionContent.trim() })
+            i++
           }
-        })
-
-      }
-      
-    
-
-
+          actions.push({ name: action, counter, content: actionContent.trim() })
+        }
+      })
+    }
     changelogParsed.push({ versionNumber, actions, versionContent });
   });
-
   return changelogParsed;
 };
-
-
-
