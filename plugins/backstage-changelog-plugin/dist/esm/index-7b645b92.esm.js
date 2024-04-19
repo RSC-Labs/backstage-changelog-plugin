@@ -68,7 +68,7 @@ const EntityChangelogCard = backstagePluginChangelogPlugin.provide(
   createComponentExtension({
     name: "EntityChangelogCard",
     component: {
-      lazy: () => import('./index-2a031e0d.esm.js').then((m) => m.ChangelogCard)
+      lazy: () => import('./index-ea21aede.esm.js').then((m) => m.ChangelogCard)
     }
   })
 );
@@ -76,10 +76,50 @@ const EntityChangelogContent = backstagePluginChangelogPlugin.provide(
   createComponentExtension({
     name: "EntityChangelogContent",
     component: {
-      lazy: () => import('./index-2a031e0d.esm.js').then((m) => m.ChangelogContent)
+      lazy: () => import('./index-ea21aede.esm.js').then((m) => m.ChangelogContent)
     }
   })
 );
+
+function semverParser(content) {
+  const regex = /# \[([\d.]+)\]\([^)]+\) \((\d{4}-\d{2}-\d{2})\)(?:\n\n(?:### .+\n(?:\* .+\n)+))?((?:.|\n)*?)(?=(?:# \[\d+\.\d+\.\d+\])|\z)/g;
+  const changelogParsed = [];
+  let eachContent;
+  const contents = [];
+  do {
+    eachContent = regex.exec(content);
+    if (eachContent) {
+      contents.push(eachContent);
+    }
+  } while (eachContent);
+  contents == null ? void 0 : contents.forEach((dataContent) => {
+    const versionNumber = `${dataContent[1]} (${dataContent[2]})`;
+    const versionContent = dataContent[3] ? dataContent[3].trim() : void 0;
+    const actions = [];
+    if (versionContent) {
+      const contentLines = versionContent.split(/\r?\n/);
+      contentLines.forEach((line, index) => {
+        if (line.startsWith("### ")) {
+          const action = line.replace("### ", "");
+          let actionContent = "";
+          let counter = 0;
+          let i = index + 1;
+          while (i < contentLines.length && !contentLines[i].startsWith("### ")) {
+            if (contentLines[i].startsWith("*")) {
+              counter++;
+              actionContent += `${contentLines[i]}
+`;
+            }
+            i++;
+          }
+          actions.push({ name: action, counter, content: actionContent.trim() });
+        }
+      });
+    }
+    changelogParsed.push({ versionNumber, actions, versionContent });
+  });
+  return changelogParsed;
+}
 
 const CHANGELOG_ANNOTATION_REF = "changelog-file-ref";
 const CHANGELOG_ANNOTATION_NAME = "changelog-name";
@@ -107,5 +147,5 @@ const getInfoAboutChangelogAnnotationConfiguration = (entity) => {
   return "Annotations are ok";
 };
 
-export { CHANGELOG_ANNOTATION_NAME as C, EntityChangelogContent as E, CHANGELOG_ANNOTATION_REF as a, EntityChangelogCard as b, changelogApiRef as c, getInfoAboutChangelogAnnotationConfiguration as g, isChangelogAnnotationConfigurationOk as i };
-//# sourceMappingURL=index-faa8aaca.esm.js.map
+export { CHANGELOG_ANNOTATION_NAME as C, EntityChangelogContent as E, CHANGELOG_ANNOTATION_REF as a, EntityChangelogCard as b, changelogApiRef as c, getInfoAboutChangelogAnnotationConfiguration as g, isChangelogAnnotationConfigurationOk as i, semverParser as s };
+//# sourceMappingURL=index-7b645b92.esm.js.map

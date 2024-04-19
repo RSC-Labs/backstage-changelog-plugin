@@ -33,9 +33,11 @@ interface EntityChangelogProps {
     parser?(content: string): ChangelogProps[];
 }
 
+declare function semverParser(content: string): ChangelogProps[];
+
 /** @public */
 declare const EntityChangelogCard: (props: EntityChangelogProps) => react.JSX.Element;
 /** @public */
 declare const EntityChangelogContent: (props: EntityChangelogProps) => react.JSX.Element;
 
-export { CHANGELOG_ANNOTATION_NAME, CHANGELOG_ANNOTATION_REF, ChangelogAction, ChangelogProps, EntityChangelogCard, EntityChangelogContent, EntityChangelogProps, getInfoAboutChangelogAnnotationConfiguration, isChangelogAnnotationConfigurationOk };
+export { CHANGELOG_ANNOTATION_NAME, CHANGELOG_ANNOTATION_REF, ChangelogAction, ChangelogProps, EntityChangelogCard, EntityChangelogContent, EntityChangelogProps, getInfoAboutChangelogAnnotationConfiguration, isChangelogAnnotationConfigurationOk, semverParser };

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import useAsync from 'react-use/lib/useAsync';
 import { Button, Dialog, DialogContent, Grid, Typography, Box, LinearProgress } from '@material-ui/core';
 import { useEntity } from '@backstage/plugin-catalog-react';
-import { C as CHANGELOG_ANNOTATION_NAME, a as CHANGELOG_ANNOTATION_REF, i as isChangelogAnnotationConfigurationOk, c as changelogApiRef } from './index-faa8aaca.esm.js';
+import { C as CHANGELOG_ANNOTATION_NAME, a as CHANGELOG_ANNOTATION_REF, i as isChangelogAnnotationConfigurationOk, c as changelogApiRef } from './index-7b645b92.esm.js';
 import { StatusOK, StatusRunning, StatusPending, StatusError, StatusWarning, Table, MarkdownContent, EmptyState, CodeSnippet, LinkButton } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
 import { Alert } from '@material-ui/lab';
@@ -328,4 +328,4 @@ const ChangelogContent = (props) => {
 };
 
 export { ChangelogCard, ChangelogContent };
-//# sourceMappingURL=index-2a031e0d.esm.js.map
+//# sourceMappingURL=index-ea21aede.esm.js.map
