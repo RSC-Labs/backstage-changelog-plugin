@@ -1,3 +1,16 @@
+
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name:  examples-semver
+  annotations:
+    backstage.io/source-location: "/Users/jennyssonjunior/Documents/open-source/backstage-changelog-plugin/examples/"
+    changelog-name: "CHANGELOG.semver.md"
+spec:
+  type: website
+  lifecycle: experimental
+  owner: guests
+
 ---
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-system
 apiVersion: backstage.io/v1alpha1
