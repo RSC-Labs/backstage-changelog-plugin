@@ -24,7 +24,7 @@ const readChangelogFile = async (changeLogFileReference) => {
 
 async function createRouter(options) {
   var _a;
-  const { logger, tokenManager, reader, discovery } = options;
+  const { logger, auth, reader, discovery } = options;
   const catalogApi = (_a = options.catalogApi) != null ? _a : new catalogClient.CatalogClient({ discoveryApi: discovery });
   const router = Router__default["default"]();
   router.use(express__default["default"].json());
@@ -34,11 +34,14 @@ async function createRouter(options) {
   });
   router.get("/entity/:namespace/:kind/:name", async (req, res) => {
     var _a2, _b, _c;
-    const token = await tokenManager.getToken();
+    const { token } = await auth.getPluginRequestToken({
+      onBehalfOf: await auth.getOwnServiceCredentials(),
+      targetPluginId: "catalog"
+    });
     const { namespace, kind, name } = req.params;
     const entity = await catalogApi.getEntityByRef(
       { namespace, kind, name },
-      token
+      { token }
     );
     if (!entity) {
       throw new errors.NotFoundError(
@@ -53,31 +56,29 @@ async function createRouter(options) {
         const result = await readChangelogFile(entitySourceLocation + changelogFilename);
         return res.status(200).json({ content: result });
       } else if (entitySourceLocation) {
-        const { type, target } = catalogModel.parseLocationRef(entitySourceLocation);
-        if (type === "url") {
-          const result = await reader.readUrl(target + "CHANGELOG.md");
+        const { type: type2, target: target2 } = catalogModel.parseLocationRef(entitySourceLocation);
+        if (type2 === "url") {
+          const result = await reader.readUrl(`${target2}CHANGELOG.md`);
           return res.status(200).json({ content: (await result.buffer()).toString("utf8") });
         }
-        if (type === "file") {
-          const result = await readChangelogFile(target + "CHANGELOG.md");
+        if (type2 === "file") {
+          const result = await readChangelogFile(`${target2}CHANGELOG.md`);
           return res.status(200).json({ content: result });
         }
         return res.status(500).json();
-      } else {
-        return res.status(404).json();
       }
-    } else {
-      const { type, target } = catalogModel.parseLocationRef(changelogFileReference);
-      if (type === "url") {
-        const result = await reader.readUrl(target);
-        return res.status(200).json({ content: (await result.buffer()).toString("utf8") });
-      }
-      if (type === "file") {
-        const result = await readChangelogFile(target);
-        return res.status(200).json({ content: result });
-      }
-      return res.status(500).json();
+      return res.status(404).json();
     }
+    const { type, target } = catalogModel.parseLocationRef(changelogFileReference);
+    if (type === "url") {
+      const result = await reader.readUrl(target);
+      return res.status(200).json({ content: (await result.buffer()).toString("utf8") });
+    }
+    if (type === "file") {
+      const result = await readChangelogFile(target);
+      return res.status(200).json({ content: result });
+    }
+    return res.status(500).json();
   });
   router.use(backendCommon.errorHandler());
   return router;
@@ -91,15 +92,15 @@ const changelogPlugin = backendPluginApi.createBackendPlugin({
         logger: backendPluginApi.coreServices.logger,
         reader: backendPluginApi.coreServices.urlReader,
         httpRouter: backendPluginApi.coreServices.httpRouter,
-        tokenManager: backendPluginApi.coreServices.tokenManager,
-        discovery: backendPluginApi.coreServices.discovery
+        discovery: backendPluginApi.coreServices.discovery,
+        auth: backendPluginApi.coreServices.auth
       },
-      async init({ logger, reader, httpRouter, tokenManager, discovery }) {
+      async init({ logger, reader, httpRouter, auth, discovery }) {
         httpRouter.use(
           await createRouter({
             logger: backendCommon.loggerToWinstonLogger(logger),
             reader,
-            tokenManager,
+            auth,
             discovery
           })
         );

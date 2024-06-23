@@ -22,11 +22,15 @@ Frontend plugin installation can be found here: [Frontend plugin](https://github
 
 ## Backend plugin
 
+
+
 Install:
 ```bash
 cd packages/backend
 yarn add @rsc-labs/backstage-changelog-plugin-backend
 ```
+
+### Old backend system
 
 Create a file `packages/backend/src/plugins/changelog.ts`:
 ```typescript
@@ -64,6 +68,14 @@ async function main() {
   ...
 }
 ```
+
+### New backend system
+
+```typescript
+backend.add(import('@rsc-labs/backstage-changelog-plugin-backend'));
+```
+
+### Configuration
 
 Backend plugin supports 3 fields, which can be used for reading a Changelog.
 Changelog itself is related to entity, so configuration is done by Annotations.

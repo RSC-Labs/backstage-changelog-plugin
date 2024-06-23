@@ -34,15 +34,15 @@ export const changelogPlugin = createBackendPlugin({
         logger: coreServices.logger,
         reader: coreServices.urlReader,
         httpRouter: coreServices.httpRouter,
-        tokenManager: coreServices.tokenManager,
         discovery: coreServices.discovery,
+        auth: coreServices.auth
       },
-      async init({ logger, reader, httpRouter, tokenManager, discovery }) {
+      async init({ logger, reader, httpRouter, auth, discovery }) {
         httpRouter.use(
           await createRouter({
             logger: loggerToWinstonLogger(logger),
             reader,
-            tokenManager,
+            auth,
             discovery
           }),
         );

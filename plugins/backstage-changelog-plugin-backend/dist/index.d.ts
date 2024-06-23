@@ -1,14 +1,14 @@
-import { UrlReader, TokenManager, PluginEndpointDiscovery } from '@backstage/backend-common';
 import { CatalogApi } from '@backstage/catalog-client';
 import express from 'express';
 import { Logger } from 'winston';
 import * as _backstage_backend_plugin_api from '@backstage/backend-plugin-api';
+import { UrlReaderService, AuthService, DiscoveryService } from '@backstage/backend-plugin-api';
 
 interface RouterOptions {
     logger: Logger;
-    reader: UrlReader;
-    tokenManager: TokenManager;
-    discovery: PluginEndpointDiscovery;
+    reader: UrlReaderService;
+    auth: AuthService;
+    discovery: DiscoveryService;
     catalogApi?: CatalogApi;
 }
 declare function createRouter(options: RouterOptions): Promise<express.Router>;
@@ -18,6 +18,6 @@ declare function createRouter(options: RouterOptions): Promise<express.Router>;
  *
  * @public
  */
-declare const changelogPlugin: () => _backstage_backend_plugin_api.BackendFeature;
+declare const changelogPlugin: _backstage_backend_plugin_api.BackendFeatureCompat;
 
 export { RouterOptions, createRouter, changelogPlugin as default };

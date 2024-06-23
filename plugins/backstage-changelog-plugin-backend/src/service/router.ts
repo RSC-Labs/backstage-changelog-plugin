@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { UrlReader, errorHandler, TokenManager, PluginEndpointDiscovery } from '@backstage/backend-common';
+import {errorHandler } from '@backstage/backend-common';
 import { CatalogClient, CatalogApi } from '@backstage/catalog-client';
 import { NotFoundError } from '@backstage/errors';
 import express from 'express';
@@ -25,19 +25,20 @@ import {
   ANNOTATION_SOURCE_LOCATION,
   parseLocationRef,
 } from '@backstage/catalog-model';
+import { AuthService, DiscoveryService, UrlReaderService } from '@backstage/backend-plugin-api';
 
 export interface RouterOptions {
   logger: Logger;
-  reader: UrlReader;
-  tokenManager: TokenManager;
-  discovery: PluginEndpointDiscovery,
+  reader: UrlReaderService;
+  auth: AuthService,
+  discovery: DiscoveryService,
   catalogApi?: CatalogApi   
 }
 
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  const { logger, tokenManager, reader, discovery } = options;
+  const { logger, auth, reader, discovery } = options;
 
   const catalogApi =
     options.catalogApi ?? new CatalogClient({ discoveryApi: discovery });
@@ -51,11 +52,14 @@ export async function createRouter(
   });
 
   router.get('/entity/:namespace/:kind/:name', async (req, res) => {
-    const token = await tokenManager.getToken();
+    const { token } = await auth.getPluginRequestToken({
+      onBehalfOf: await auth.getOwnServiceCredentials(),
+      targetPluginId: 'catalog',
+    });
     const { namespace, kind, name } = req.params;
     const entity = await catalogApi.getEntityByRef(
       { namespace, kind, name },
-      token,
+      { token },
     );
     if (!entity) {
       throw new NotFoundError(
